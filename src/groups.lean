@@ -250,7 +250,33 @@ lemma ident : (e : G) ∈ K := K.ident
 lemma closure {a b : G} : a ∈ K → b ∈ K → a + b ∈ K := 
   λ h1 h2, K.closure h1 h2
 
-lemma inverse (a : G) : a ∈ K → (-a ∈ K) := λ h, K.inv h
+lemma inverse {a : G} : a ∈ K → (-a ∈ K) := λ h, K.inv h
+
+theorem inv_mem_iff {x : G} : (-x) ∈ K ↔ x ∈ K :=
+begin 
+  split, 
+  {intro H, replace H := subgroup.inverse K (-x) H, 
+   rwa group.inv_idempotent at H},
+  intro H, exact subgroup.inverse K x H
+end 
+
+lemma cancel_right_mem {x y : G} (h : x ∈ K) : y + x ∈ K ↔ y ∈ K :=
+begin 
+  split, 
+  {intro hyx, have h' := subgroup.closure K hyx (K.inverse h),
+   rwa [group.assoc, group.inv_r, group.ident_r] at h',},
+  {intro hy, exact subgroup.closure K hy h,}
+end 
+
+lemma cancel_left_mem {x y : G} (h : x ∈ K) :  x + y ∈ K ↔ y ∈ K :=
+begin 
+  split, 
+  {intro hyx, have h' := subgroup.closure K (K.inverse h) hyx,
+   rwa [← group.assoc, group.inv_l, group.ident_l] at h',},
+  {intro hy, exact subgroup.closure K h hy,}
+end 
+
+
 
 
 
