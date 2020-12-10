@@ -205,6 +205,14 @@ lemma inv_cancel_right (a b : G) : a + b + (-b) = a :=
 by rw [associative, inv_r, add_zero]
 
 
+def abelian (G : Type u) [group G] : Prop := ∀ a b : G, a + b = b + a
+
+def pow (g : G) : ℕ → G
+| 0 := 0 
+| (n + 1) :=  g + pow n 
+
+infix `↟` : 100 := group.pow
+
 end group
 
 instance group.to_cancel_monoid {G : Type u} [group G] : cancellative_monoid G := { 
